@@ -1,8 +1,7 @@
-<div style="text-align: center;">
-<img src="git_img/CipherTools_NameIco.png" alt="Logo">
-</div>
-
 <h1 style="text-align: center;">Cipher Tools（原名瑞士军刀） x Rana Toolkit</h1>
+<div align="center">
+<img src="git_img/CipherTools_NameIco.png" alt="Logo" width="300" height="360">
+</div>
 
 <p align="center">
 <a href="https://ct.ne0w0r1d.top">官方文档</a>
@@ -19,7 +18,7 @@
 
 名字取自于《崩坏：星穹铁道》的[赛飞儿]https://mzh.moegirl.org.cn/%E8%B5%9B%E9%A3%9E%E5%84%BF)，啊没错就是那只猫娘，~~你也可以理解为是无畏契约的阴暗保安零~~
 而 Rana Toolkit 的 Rana 则取自于 《BanG Dream！It's MyGO！！！！！》的[要乐奈](https://mzh.moegirl.org.cn/%E8%A6%81%E4%B9%90%E5%A5%88)
-Rana Toolkit 项目[传送门](/Ne0W0r1d/Rana_Toolkit)
+Rana Toolkit 项目[传送门](/Ne0W0r1d/Rana_Toolkit)    
 
 ## 预览截图
 
