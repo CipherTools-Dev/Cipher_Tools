@@ -105,7 +105,7 @@ void home::help_Wiki_trigger(){
 
     qInfo()<<"已触发help_Wiki_trigger";
 
-    QUrl WikiUrl("https://armyknife.ne0w0r1d.top");// 使用QUrl定义*Wiki URL*
+    QUrl WikiUrl("https://ct.ne0w0r1d.top");// 使用QUrl定义*Wiki URL*
     QDesktopServices::openUrl(WikiUrl);// 用Qt桌面服务打开*Wiki URL*
 
     qDebug() << "桌面服务信号已发出，请检查浏览器 Wiki";

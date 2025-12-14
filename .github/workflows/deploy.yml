@@ -1,4 +1,4 @@
-name: Qt CI Matrix (qmake)
+name: QMake Ci
 
 on:
   push:
@@ -58,6 +58,9 @@ jobs:
           cd build
           nmake
           windeployqt release\CipherTools.exe
+          del /q release\*.obj
+          del /q release\*.h
+          del /q release\*.cpp
           
       - name: Build
         if: runner.os == 'Linux'
