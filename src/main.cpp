@@ -22,7 +22,7 @@ QString AKT_VERSION = "RANATOOLKIT.astra.prototype"; //该程序版本号请根�
 // 自定义信息接口
 void customMessageHandler(QtMsgType type, const QMessageLogContext &, const QString &msg)
 {
-    static QFile logFile("ArmyKnife.log"); //日志文件打开 / 生成
+    static QFile logFile("CipherTools.log"); //日志文件打开 / 生成
 
     // 如果无法打开日志则生成报错
     if (!logFile.isOpen()) {
