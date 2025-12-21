@@ -138,7 +138,7 @@ void home::getwanv6()
 // 获得 ISP
 void home::getisp() {
     QNetworkAccessManager *ispget = new QNetworkAccessManager(this);
-    QNetworkRequest request(QUrl("https://cip.cc/"+ this->ipv4));
+    QNetworkRequest request(QUrl("https://cip.cc/"+ ipv4));
     QNetworkReply *ispreply = ispget->get(request);
     connect(ispreply, &QNetworkReply::finished, this, [this, ispreply]() {
         if (ispreply->error() == QNetworkReply::NoError) {
