@@ -3,6 +3,8 @@
 
 #include <QDialog>
 
+#pragma once
+
 namespace Ui {
 class WakeNow;
 }

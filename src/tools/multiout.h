@@ -3,6 +3,9 @@
 
 #include <QDialog>
 #include <QtWebEngineWidgets>
+
+#pragma once
+
 namespace Ui {
 class MultiOut;
 }

@@ -1,6 +1,10 @@
 #ifndef VERSION_H
 #define VERSION_H
+
 #include <QString>
+
+#pragma once
+
 class Version
 {
 public:
