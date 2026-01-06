@@ -398,12 +398,20 @@
      <addaction name="PingCS"/>
      <addaction name="PINGGNT"/>
     </widget>
+    <widget class="QMenu" name="spd">
+     <property name="title">
+      <string>测速</string>
+     </property>
+     <addaction name="spd_USTC"/>
+     <addaction name="spd_NJU"/>
+    </widget>
     <addaction name="MOWeb"/>
     <addaction name="deviceinfo"/>
     <addaction name="WOL"/>
     <addaction name="track"/>
     <addaction name="NAT"/>
     <addaction name="Ping"/>
+    <addaction name="spd"/>
    </widget>
    <addaction name="tools"/>
    <addaction name="helpcenter"/>
@@ -570,6 +578,16 @@
    </property>
    <property name="text">
     <string>捐赠</string>
+   </property>
+  </action>
+  <action name="spd_USTC">
+   <property name="text">
+    <string>USTC - 中科大</string>
+   </property>
+  </action>
+  <action name="spd_NJU">
+   <property name="text">
+    <string>NJU - 南京大学</string>
    </property>
   </action>
  </widget>

@@ -4,6 +4,8 @@
 #include <QDialog>
 #include <QSettings>
 
+#pragma once
+
 namespace Ui {
 class Settings;
 }

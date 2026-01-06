@@ -26,6 +26,8 @@
 #include <QList> // 动态数组支持
 #include <QRegularExpression> // 正则表达式支持
 
+#pragma once
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class home;
@@ -73,6 +75,10 @@ private slots:
     /* Tools */
     void Tools_MOWeb_Trigger(); // 在线版多出口信号槽
     //void Tools_MOQt_Trigger();
+
+/* 工具 */
+    void Tools_USTCspd_Trigger(); // 在线打开 USTC 测速
+    void Tools_NJUspd_Trigger(); // 在线打开 USTC 测速
 private:
     Ui::home *ui;
     QNetworkAccessManager *sessionNet;

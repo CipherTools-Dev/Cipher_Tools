@@ -1,8 +1,7 @@
 /*
 ******** Cipher Tools ********
-******** 2025© Ne0W0r1d ********
-******** 2024-2025© Yumeyo ********
-******** LGPL 3 License ********
+******** 2025-2026 Ne0W0r1d ********
+******** MIT License ********
 ******** Home ********
 */
 
@@ -12,25 +11,25 @@
 #include "ui_Home.h"
 #include "version.h"
 #include "tools/multiout.h"
+#include "tools/testspeed.h"
 
 home::home(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::home)
 {
     ui->setupUi(this);
-    setFixedSize(this->width(),this->height()); //固定大小（Fixed site）
+    setFixedSize(this->width(),this->height()); //固定大小
 
-    QString systemname = QSysInfo::kernelType();// 获取内核信息（Get Kernel Information）
-    QString distro = QSysInfo::prettyProductName();// 获取发行版名称（Get Distro Name）
-    QString systemver = QSysInfo::productVersion();// 获取系统版本（Get System Version）
+    QString systemname = QSysInfo::kernelType();// 获取内核信息
+    QString distro = QSysInfo::prettyProductName();// 获取发行版名称
+    QString systemver = QSysInfo::productVersion();// 获取系统版本
 
-    ui -> Version ->setText(AK_VERSION); // 主页应用版本（Home App Version）
-    ui -> test_waring -> setText("Alpha 版本 || 请勿用于生产环境 || 请及时汇报BUG || 请勿滥用接口"); // 主页测试版警告（Home Testing Version Warning）
+    ui -> Version ->setText(AK_VERSION); // 主页应用版本
+    ui -> test_waring -> setText("Alpha 版本 || 请勿用于生产环境 || 请及时汇报BUG || 请勿滥用接口"); // 主页测试版警告
 
     home::HomeInfo_Refresh(); // 启动首次触发刷新（Trigger Auto Refresh）
-
-    qInfo()<<"系统环境："<<systemname<<"；系统："<<distro<<"；系统版本："<<systemver; // 输出系统版本日志（Echo System Version Log）
-    qInfo()<<"软件版本："<<AK_VERSION<<"；工具箱版本："<<AKT_VERSION; // 输出软件版本日志（Echo App Version Log），版本在 Main.cpp（Version in main.cpp）
+    qInfo()<<"系统环境："<<systemname<<"；系统："<<distro<<"；系统版本："<<systemver; // 输出系统版本日志
+    qInfo()<<"软件版本："<<AK_VERSION<<"；工具箱版本："<<AKT_VERSION; // 输出软件版本日志，版本在 Main.cpp
 
     // 菜单栏：帮助
     connect(ui -> about, &QAction::triggered, this, &home::help_About_trigger); // 菜单栏 - 帮助：关于
@@ -49,7 +48,8 @@ home::home(QWidget *parent)
 
     /* 菜单-工具 */
     connect(ui -> MOWeb, &QAction::triggered, this, &home::Tools_MOWeb_Trigger); // 工具：多出口
-
+    connect(ui -> spd_USTC, &QAction::triggered, this, &home::Tools_USTCspd_Trigger); // 工具：多出口
+    connect(ui -> spd_NJU, &QAction::triggered, this, &home::Tools_NJUspd_Trigger); // 工具：多出口
     /*主页：主机名*/
     QString localHostname = QHostInfo::localHostName(); // 主机名实现
     QString beforPCname = "主机名：";// setText | hostname 前的信息
@@ -66,7 +66,7 @@ home::home(QWidget *parent)
 
 home::~home()
 {
-    qInfo()<<tr("Exited");
+    qInfo()<<tr("已经退出！");
     delete ui;
 }
 
@@ -140,33 +140,35 @@ void home::getwanv6()
 void home::getisp() {
     if (ipv4.isEmpty())
         return;
-    static  QNetworkAccessManager *ispget = new QNetworkAccessManager(this);
-    QNetworkRequest request(QUrl("https://cip.cc/"+ ipv4));
-    QNetworkReply *ispreply = ispget->get(request);
-    connect(ispreply, &QNetworkReply::finished, this, [this, ispreply]() {
-        if (ispreply->error() == QNetworkReply::NoError) {
+    static  QNetworkAccessManager *ispget = new QNetworkAccessManager(this); // QNAM 静态化，ispget
+    QNetworkRequest request(QUrl("https://cip.cc/"+ ipv4)); //请求 QUrl 地址
+    QNetworkReply *ispreply = ispget->get(request); // 设置 reply
+    connect(ispreply, &QNetworkReply::finished, this, [this, ispreply]() { // 连接 ispreply
+        if (ispreply->error() == QNetworkReply::NoError) { // 如果返回无失败
 
-            QString replyText = QString::fromUtf8(ispreply->readAll());
-            QString isp;
+            qDebug()<<" ISP 一切正常 ";
 
-            static const QRegularExpression regex(R"(数据二\s*:\s*(.*))");// 正则表达式提取
-            QRegularExpressionMatch match = regex.match(replyText);
+            QString replyText = QString::fromUtf8(ispreply->readAll()); // 将获取到的地址转向可读的 UTF8 地址
+            QString isp; // 定义 ISP 变量
+
+            static const QRegularExpression regex(R"(数据二\s*:\s*(.*))");// 正则表达式
+            QRegularExpressionMatch match = regex.match(replyText); // 正则匹配
 
             if (match.hasMatch()) {
-                isp = match.captured(1).trimmed();
-                ui->ispinfo->setText(isp);
+                isp = match.captured(1).trimmed(); // 取正则匹配的第一个选择
+                ui->ispinfo->setText(isp); // 输出到 UI
             } else {
-                isp = "查询不到喵🐱，请检查日志🐱";
-                ui->ispinfo->setText(isp);
-                qWarning() << "查询不到喵：" <<ispreply->errorString();
+                isp = "查询不到喵🐱，请检查日志🐱"; // 反之变量即错误信息（无法查询的话）
+                ui->ispinfo->setText(isp); // 传递给前端
+                qWarning() << "查询不到喵：" <<ispreply->errorString(); // 日志
             }
         }else{
 
-            qCritical() << "请求失败喵：" <<ispreply->errorString();
-            ui -> ispinfo -> setText("请求失败喵，请检查日志🐱");
+            qCritical() << "请求失败喵：" <<ispreply->errorString(); // 上面的 ispreply 如果请求失败的话
+            ui -> ispinfo -> setText("请求失败喵，请检查日志🐱"); // 返给 UI
         }
-        ispreply->abort();
-        ispreply->deleteLater();
+        ispreply->abort(); // 退出 ISP Reply
+        ispreply->deleteLater(); // 从内存里面删除 ISP Reply
     });
 
 }
@@ -239,30 +241,30 @@ void home::getlan(){
             }
         }
 
-        QString lanip_tooltip, MAC_tooltip;
+        QString lanip_tooltip, MAC_tooltip; // 弹出气泡的问题
 
-        for (const QNetworkInterface &iface : QNetworkInterface::allInterfaces()) {
+        for (const QNetworkInterface &iface : QNetworkInterface::allInterfaces()) { // 使用上面循环检测的数据
 
-            lanip_tooltip += "<b>" + iface.humanReadableName() + "</b><br>";
-            MAC_tooltip += "<b>" + iface.humanReadableName() + "</b><br>";
-            MAC_tooltip += "&nbsp;&nbsp;MAC: " + iface.hardwareAddress() + "<br>";
+            lanip_tooltip += "<b>" + iface.humanReadableName() + "</b><br>"; // 本地 IP 地址的 Tooltip 的弹出窗口 - 接口信息
+            MAC_tooltip += "<b>" + iface.humanReadableName() + "</b><br>"; // MAC 地址的 Tooltip 的弹出窗口 - 接口信息
+            MAC_tooltip += "&nbsp;&nbsp;MAC: " + iface.hardwareAddress() + "<br>";// MAC 地址的 Tooltip 的弹出窗口 - MAC 地址
 
-            for (const QNetworkAddressEntry &entry : iface.addressEntries()) {
-                QHostAddress ip = entry.ip();
+            for (const QNetworkAddressEntry &entry : iface.addressEntries()) { // 使用上面循环检测的数据
+                QHostAddress ip = entry.ip(); // 使用 QHostAddress 获取 IP 地址
 
-                if (ip.protocol() == QAbstractSocket::IPv4Protocol) {
-                    lanip_tooltip += "&nbsp;&nbsp;IPv4: " + ip.toString() + "<br>";
-                } else if (ip.protocol() == QAbstractSocket::IPv6Protocol &&
-                           !ip.toString().startsWith("fe80")) {
-                    lanip_tooltip += "&nbsp;&nbsp;IPv6: " + ip.toString() + "<br>";
+                if (ip.protocol() == QAbstractSocket::IPv4Protocol) { // 检测 V4 协议
+                    lanip_tooltip += "&nbsp;&nbsp;IPv4: " + ip.toString() + "<br>"; // 追加 V4 的字符串
+                } else if (ip.protocol() == QAbstractSocket::IPv6Protocol && // 反之检测到 V6 的地址
+                           !ip.toString().startsWith("fe80")) { // 排除 fe80 地址
+                    lanip_tooltip += "&nbsp;&nbsp;IPv6: " + ip.toString() + "<br>"; // 追加 V6 字符串
                 }
             }
 
             lanip_tooltip += "<br>";
         }
 
-        ui->localv4->setToolTip(lanip_tooltip);
-        ui->currentMac->setToolTip(MAC_tooltip);
+        ui->localv4->setToolTip(lanip_tooltip); // 输出到前端弹出气泡
+        ui->currentMac->setToolTip(MAC_tooltip); // 输出到前端弹出气泡
     }
 }
 
@@ -292,9 +294,36 @@ void home::Tools_MOWeb_Trigger(){
     qDebug() << "请检查窗口 MutiOutWeb";
 }
 
+/* USTC 测速站 - 使用 Qt Web Engine */
+void home::Tools_USTCspd_Trigger(){
+    qInfo()<<"已触发打开测速";
+
+    TestSpeed_USTC *USTC_SPD = new TestSpeed_USTC(this);   // 加载窗口
+
+    USTC_SPD->setAttribute(Qt::WA_DeleteOnClose); // 关闭窗口后删除对象
+    USTC_SPD->setModal(false); // 关闭
+    USTC_SPD->show();
+    USTC_SPD->targetURL("USTC",QUrl("https://test.ustc.edu.cn"));
+    qDebug() << "请检查测速窗口";
+}
+
+/* NJU 测速站 - 使用 Qt Web Engine */
+void home::Tools_NJUspd_Trigger(){
+    qInfo()<<"已触发打开测速";
+
+    TestSpeed_USTC *USTC_SPD = new TestSpeed_USTC(this);   // 加载窗口
+
+    USTC_SPD->setAttribute(Qt::WA_DeleteOnClose); // 关闭窗口后删除对象
+    USTC_SPD->setModal(false);
+    USTC_SPD->show();
+    USTC_SPD->targetURL("NJU",QUrl("https://test.nju.edu.cn"));
+
+    qDebug() << "请检查测速窗口";
+}
+
+/* 帮助实现 */
 
 /*打开文档页*/
-
 void home::help_Blog_trigger(){
 
     qInfo()<<"已触发help_Wiki_trigger";
