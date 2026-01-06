@@ -2,6 +2,8 @@ name: QMake Ci
 
 on:
   push:
+    paths:
+      - 'src/**'
   pull_request:
 
 jobs:
