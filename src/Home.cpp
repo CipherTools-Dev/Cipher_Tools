@@ -24,8 +24,10 @@ home::home(QWidget *parent)
     QString distro = QSysInfo::prettyProductName();// 获取发行版名称
     QString systemver = QSysInfo::productVersion();// 获取系统版本
 
+    sessionNet = new QNetworkAccessManager(this); // 大一统 QNAM
+
     ui -> Version ->setText(AK_VERSION); // 主页应用版本
-    ui -> test_waring -> setText("Alpha 版本 || 请勿用于生产环境 || 请及时汇报BUG || 请勿滥用接口"); // 主页测试版警告
+    ui -> test_waring -> setText("测试版本 || 请勿用于生产环境 || 请及时汇报BUG || 请勿滥用接口"); // 主页测试版警告
 
     home::HomeInfo_Refresh(); // 启动首次触发刷新（Trigger Auto Refresh）
     qInfo()<<"系统环境："<<systemname<<"；系统："<<distro<<"；系统版本："<<systemver; // 输出系统版本日志
@@ -81,6 +83,8 @@ void home::HomeInfo_Refresh(){
     ui -> localv4add -> setText("Loading......"); // 局域网V4: UI初始化
     ui -> localv6add -> setText("Loading......"); // 局域网V6: UI初始化
     ui -> priority -> setText("Loading......"); // 优先级: UI初始化
+    ui -> asn -> setText("Loading......"); // 优先级: UI初始化
+
 
     this->getwanv6(); // 执行公网 V6 获取
     getlan(); // 执行本地获取
@@ -89,24 +93,25 @@ void home::HomeInfo_Refresh(){
 
 }
 
-void home::getwanv4() // 公网 IPv4（Public IPv4）
+// 公网 IPv4
+void home::getwanv4()
 {
-    static QNetworkAccessManager *v4manager = new QNetworkAccessManager(this); // 设置新的QNAM
     QNetworkRequest request(QUrl("https://4.ipw.cn")); // 设置Request API为ipw.cn（TODO LIST - 支持多API，并研究出口API）
-    QNetworkReply *v4reply = v4manager->get(request); // 设置Manager操作为request
+    QNetworkReply *v4reply = sessionNet->get(request); // 设置Manager操作为request
     connect(v4reply, &QNetworkReply::finished, this, [this, v4reply]() { // 连接V4 Reply
 
         if (v4reply->error() == QNetworkReply::NoError) { // 判定是否有错误
             this->ipv4 = QString(v4reply->readAll()).trimmed(); // 设置IPV4变量为v4返回信息
             ui -> v4add -> setText(ipv4); // 显示在UI中
-            if (!ipv4.isEmpty())
-                getisp();
+            if (!ipv4.isEmpty()){
+                getisp(); // 异步执行 ISP
+                getASN(); // 异步执行 ASN
+            }
         } else {
             QString ipv4_error = v4reply->errorString();
             qCritical() << "请求失败:" << v4reply->errorString(); // 输出错误信息
             ui -> v4add -> setText("请求失败🐱，请检查日志🐱"); // 输出错误UI
         }
-
         v4reply->abort(); // 终止 v4reply 函数，优化内存泄露
         v4reply->deleteLater(); // 从我的内存滚出去
     });
@@ -117,9 +122,8 @@ void home::getwanv4() // 公网 IPv4（Public IPv4）
 void home::getwanv6()
 {
 
-    static QNetworkAccessManager *v6manager = new QNetworkAccessManager(this);
     QNetworkRequest request(QUrl("https://6.ipw.cn"));
-    QNetworkReply *v6reply = v6manager->get(request);
+    QNetworkReply *v6reply = sessionNet->get(request);
     connect(v6reply, &QNetworkReply::finished, this, [this, v6reply]() {
 
         if (v6reply->error() == QNetworkReply::NoError) {
@@ -129,21 +133,21 @@ void home::getwanv6()
             qCritical() << "请求失败:" << v6reply->errorString();
             ui -> v6add -> setText("查询失败🐱看看右边有没有输出喵，如果没有请检查日志喵");
         }
-
         v6reply->abort();
         v6reply->deleteLater();
-
     });
 }
 
 // 获得 ISP
 void home::getisp() {
     if (ipv4.isEmpty())
-        return;
-    static  QNetworkAccessManager *ispget = new QNetworkAccessManager(this); // QNAM 静态化，ispget
+        return; // 如果 IPv4 返回空值为真则返回去
+
     QNetworkRequest request(QUrl("https://cip.cc/"+ ipv4)); //请求 QUrl 地址
-    QNetworkReply *ispreply = ispget->get(request); // 设置 reply
+    QNetworkReply *ispreply = sessionNet->get(request); // 设置 reply
+
     connect(ispreply, &QNetworkReply::finished, this, [this, ispreply]() { // 连接 ispreply
+
         if (ispreply->error() == QNetworkReply::NoError) { // 如果返回无失败
 
             qDebug()<<" ISP 一切正常 ";
@@ -170,15 +174,12 @@ void home::getisp() {
         ispreply->abort(); // 退出 ISP Reply
         ispreply->deleteLater(); // 从内存里面删除 ISP Reply
     });
-
 }
 
 // 执行优先级获取
-
-void home::getpriority(){ // 连接优先级
-    static QNetworkAccessManager *priorityget = new QNetworkAccessManager(this);
+void home::getpriority(){
     QNetworkRequest request(QUrl("https://test.ipw.cn"));
-    QNetworkReply *priorityreply = priorityget->get(request);
+    QNetworkReply *priorityreply = sessionNet->get(request);
 
     connect(priorityreply, &QNetworkReply::finished, this, [this, priorityreply](){
         if(priorityreply->error() == QNetworkReply::NoError){
@@ -268,20 +269,48 @@ void home::getlan(){
     }
 }
 
+
+// ASN
+void home::getASN(){
+    if (ipv4.isEmpty())
+        return;
+
+    QNetworkRequest request(QUrl("https://ipinfo.io/" + ipv4 + "/json/"));
+    QNetworkReply *asnreply = sessionNet->get(request);
+
+    connect(asnreply, &QNetworkReply::finished, this, [this, asnreply]() {
+
+        if (asnreply->error() == QNetworkReply::NoError) {
+
+            qDebug()<<" ASN 一切正常 ";
+            QByteArray data = asnreply->readAll(); //保存原始数据
+            QJsonDocument doc = QJsonDocument::fromJson(data);// 读取原始 json 数据
+            if (!doc.isNull() && doc.isObject()) { // doc 非空且 json 是对象的话
+                QJsonObject obj = doc.object(); // QtJson 对象 = doc 的对象
+                if (obj.contains("org") && obj["org"].isString()) { //如果包含 org
+                    QString org = obj["org"].toString(); // 将对象的 org 字符串提出
+                    ui->asn->setText(org); // 输出前端
+                    } else {
+                    qWarning() << "JSON 中无 org 字段! 响应内容:" << data; // 警告出错
+                    ui->asn->setText("查询不到喵🐱，请检查日志🐱"); // 前端报错
+                }
+            } else {
+                qWarning() << "JSON 解析失败! 响应内容:" << data; // 警告出错
+                ui->asn->setText("JSON 解析失败"); // 前端报错
+                        }
+        }else{
+            qCritical() << "请求失败喵：" <<asnreply->errorString(); // reply 出错报错
+            ui -> asn -> setText("请求失败喵，请检查日志🐱"); // 输出前端
+        }
+        asnreply->abort(); // 退出 ISP Reply
+        asnreply->deleteLater(); // 从内存里面删除 ISP Reply
+    });
+}
+
+
 /* 菜单栏业务相关定义 */
 
 /* 工具实现 */
-
-/* 多出口在线版 - 使用 Qt 桌面服务
-void home::Tools_MOWeb_Trigger(){
-    qInfo()<<"muti_out_website_trigger";
-
-    QUrl MowebUrl("https://raw.githack.com/yumeyo23/netinfochecker/main/checker-web.html");
-    QDesktopServices::openUrl(MowebUrl);
-
-    qDebug() << "桌面服务信号已发出，请检查浏览器 MutiOutWeb";
-}
-*/
 
 /* 多出口在线版 - 使用 Qt Web Engine */
 void home::Tools_MOWeb_Trigger(){

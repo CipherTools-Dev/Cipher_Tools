@@ -25,6 +25,7 @@
 #include <QNetworkInterface> // 网卡信息支持
 #include <QList> // 动态数组支持
 #include <QRegularExpression> // 正则表达式支持
+#include <QJsonDocument> // Json 解析支持
 
 #pragma once
 
@@ -46,6 +47,7 @@ public:
     void getisp(); // 获取ISP
     void getlan(); // 获取LAN相关
     void getpriority();// 查询IP优先级
+    void getASN(); // 自治系统
 
 private slots:
 /* Help */
@@ -70,15 +72,14 @@ private slots:
 
 /* 主页 */
     void HomeInfo_Refresh(); // 刷新按钮信号槽
-    // void HomeInfo_Settings(); // 设置按钮信号槽
+    // void HomeInfo_Settings(); // 设置按钮信号槽，由于设置没做完暂不启用
 
     /* Tools */
     void Tools_MOWeb_Trigger(); // 在线版多出口信号槽
-    //void Tools_MOQt_Trigger();
 
 /* 工具 */
     void Tools_USTCspd_Trigger(); // 在线打开 USTC 测速
-    void Tools_NJUspd_Trigger(); // 在线打开 USTC 测速
+    void Tools_NJUspd_Trigger(); // 在线打开 NJU 测速
 private:
     Ui::home *ui;
     QNetworkAccessManager *sessionNet;
