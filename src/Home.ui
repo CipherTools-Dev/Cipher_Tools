@@ -31,7 +31,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>私隐模式</string>
+     <string>私隐模式 (&amp;P)</string>
     </property>
    </widget>
    <widget class="QPushButton" name="settings">
@@ -47,7 +47,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>设定</string>
+     <string>设定 (&amp;S)</string>
     </property>
    </widget>
    <widget class="QLabel" name="hostname">
@@ -74,10 +74,10 @@
       <x>20</x>
       <y>20</y>
       <width>351</width>
-      <height>87</height>
+      <height>91</height>
      </rect>
     </property>
-    <layout class="QFormLayout" name="formLayout_2">
+    <layout class="QFormLayout" name="WANIP_Form">
      <item row="0" column="0">
       <widget class="QLabel" name="v4">
        <property name="font">
@@ -125,10 +125,10 @@
       <x>20</x>
       <y>110</y>
       <width>351</width>
-      <height>71</height>
+      <height>81</height>
      </rect>
     </property>
-    <layout class="QFormLayout" name="formLayout_4">
+    <layout class="QFormLayout" name="ISPandASN_Form">
      <item row="0" column="0">
       <widget class="QLabel" name="isp">
        <property name="enabled">
@@ -140,7 +140,7 @@
         </font>
        </property>
        <property name="text">
-        <string>ISP</string>
+        <string>ISP与自治系统</string>
        </property>
       </widget>
      </item>
@@ -159,6 +159,13 @@
        </property>
       </widget>
      </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="asn">
+       <property name="text">
+        <string>Loading......</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </widget>
    <widget class="QWidget" name="layoutWidget">
@@ -167,10 +174,10 @@
       <x>390</x>
       <y>20</y>
       <width>351</width>
-      <height>81</height>
+      <height>91</height>
      </rect>
     </property>
-    <layout class="QFormLayout" name="formLayout">
+    <layout class="QFormLayout" name="localIP_form">
      <item row="0" column="0">
       <widget class="QLabel" name="localv4">
        <property name="font">
@@ -215,10 +222,10 @@
       <x>390</x>
       <y>110</y>
       <width>351</width>
-      <height>71</height>
+      <height>81</height>
      </rect>
     </property>
-    <layout class="QFormLayout" name="formLayout_6">
+    <layout class="QFormLayout" name="MAC_Form">
      <item row="0" column="0">
       <widget class="QLabel" name="currentMac">
        <property name="font">
@@ -258,7 +265,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>刷新</string>
+     <string>刷新 (&amp;R)</string>
     </property>
    </widget>
    <widget class="QLabel" name="priority">
@@ -351,7 +358,7 @@
    </property>
    <widget class="QMenu" name="helpcenter">
     <property name="title">
-     <string>帮助中心</string>
+     <string>帮助中心 (&amp;H)</string>
     </property>
     <widget class="QMenu" name="repos">
      <property name="title">
@@ -386,21 +393,21 @@
      <bool>false</bool>
     </property>
     <property name="title">
-     <string>工具</string>
+     <string>工具 (&amp;T)</string>
     </property>
     <widget class="QMenu" name="Ping">
      <property name="enabled">
       <bool>false</bool>
      </property>
      <property name="title">
-      <string>延迟检测</string>
+      <string>延迟检测 (&amp;P)</string>
      </property>
      <addaction name="PingCS"/>
      <addaction name="PINGGNT"/>
     </widget>
     <widget class="QMenu" name="spd">
      <property name="title">
-      <string>测速</string>
+      <string>测速 (&amp;S)</string>
      </property>
      <addaction name="spd_USTC"/>
      <addaction name="spd_NJU"/>
@@ -421,7 +428,7 @@
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>局域网唤醒</string>
+    <string>局域网唤醒 (&amp;W)</string>
    </property>
   </action>
   <action name="track">
@@ -429,7 +436,7 @@
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>路由检测</string>
+    <string>路由检测 (&amp;R)</string>
    </property>
   </action>
   <action name="NAT">
@@ -437,7 +444,7 @@
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>NAT 检测</string>
+    <string>NAT 检测 (&amp;N)</string>
    </property>
   </action>
   <action name="about">
@@ -508,7 +515,7 @@
   </action>
   <action name="MOWeb">
    <property name="text">
-    <string>多出口</string>
+    <string>多出口 (&amp;M)</string>
    </property>
   </action>
   <action name="deviceinfo">
@@ -516,7 +523,7 @@
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>设备信息</string>
+    <string>设备信息 (&amp;D)</string>
    </property>
   </action>
   <action name="MOQt">
