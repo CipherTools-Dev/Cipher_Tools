@@ -409,8 +409,22 @@
      <property name="title">
       <string>测速 (&amp;S)</string>
      </property>
-     <addaction name="spd_USTC"/>
-     <addaction name="spd_NJU"/>
+     <widget class="QMenu" name="menuUSTC">
+      <property name="title">
+       <string>USTC - 中科大</string>
+      </property>
+      <addaction name="IPv4_USTC"/>
+      <addaction name="IPv6_USTC"/>
+     </widget>
+     <widget class="QMenu" name="menuNJU">
+      <property name="title">
+       <string>NJU - 南京大学</string>
+      </property>
+      <addaction name="IPv4_NJU"/>
+      <addaction name="IPv6_NJU"/>
+     </widget>
+     <addaction name="menuUSTC"/>
+     <addaction name="menuNJU"/>
     </widget>
     <addaction name="MOWeb"/>
     <addaction name="deviceinfo"/>
@@ -587,14 +601,24 @@
     <string>捐赠</string>
    </property>
   </action>
-  <action name="spd_USTC">
+  <action name="IPv4_USTC">
    <property name="text">
-    <string>USTC - 中科大</string>
+    <string>IPv4</string>
    </property>
   </action>
-  <action name="spd_NJU">
+  <action name="IPv6_USTC">
    <property name="text">
-    <string>NJU - 南京大学</string>
+    <string>IPv6</string>
+   </property>
+  </action>
+  <action name="IPv4_NJU">
+   <property name="text">
+    <string>IPv4</string>
+   </property>
+  </action>
+  <action name="IPv6_NJU">
+   <property name="text">
+    <string>IPv6</string>
    </property>
   </action>
  </widget>
