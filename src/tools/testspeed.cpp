@@ -6,8 +6,7 @@ TestSpeed_USTC::TestSpeed_USTC(QWidget *parent) :
     ui(new Ui::TestSpeed_USTC)
 {
     ui->setupUi(this);
-
-
+    setFixedSize(this->width(),this->height());
 }
 
 TestSpeed_USTC::~TestSpeed_USTC()
