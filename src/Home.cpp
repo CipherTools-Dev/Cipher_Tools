@@ -50,8 +50,10 @@ home::home(QWidget *parent)
 
     /* 菜单-工具 */
     connect(ui -> MOWeb, &QAction::triggered, this, &home::Tools_MOWeb_Trigger); // 工具：多出口
-    connect(ui -> spd_USTC, &QAction::triggered, this, &home::Tools_USTCspd_Trigger); // 工具：多出口
-    connect(ui -> spd_NJU, &QAction::triggered, this, &home::Tools_NJUspd_Trigger); // 工具：多出口
+    connect(ui -> IPv4_USTC, &QAction::triggered, this, &home::Tools_USTCspd_v4_Trigger); // 工具：中科大 v4 测速站
+    connect(ui -> IPv6_USTC, &QAction::triggered, this, &home::Tools_USTCspd_v6_Trigger); // 工具：中科大 v6 测速站
+    connect(ui -> IPv4_NJU, &QAction::triggered, this, &home::Tools_NJUspd_v4_Trigger); // 工具：南京大学 V4 测速站
+    connect(ui -> IPv6_NJU, &QAction::triggered, this, &home::Tools_NJUspd_v6_Trigger); // 工具：南京大学 V6 测速站
     /*主页：主机名*/
     QString localHostname = QHostInfo::localHostName(); // 主机名实现
     QString beforPCname = "主机名：";// setText | hostname 前的信息
@@ -323,8 +325,8 @@ void home::Tools_MOWeb_Trigger(){
     qDebug() << "请检查窗口 MutiOutWeb";
 }
 
-/* USTC 测速站 - 使用 Qt Web Engine */
-void home::Tools_USTCspd_Trigger(){
+/* USTC v4 测速站 - 使用 Qt Web Engine */
+void home::Tools_USTCspd_v4_Trigger(){
     qInfo()<<"已触发打开测速";
 
     TestSpeed_USTC *USTC_SPD = new TestSpeed_USTC(this);   // 加载窗口
@@ -336,8 +338,21 @@ void home::Tools_USTCspd_Trigger(){
     qDebug() << "请检查测速窗口";
 }
 
-/* NJU 测速站 - 使用 Qt Web Engine */
-void home::Tools_NJUspd_Trigger(){
+/* USTC v4 测速站 - 使用 Qt Web Engine */
+void home::Tools_USTCspd_v6_Trigger(){
+    qInfo()<<"已触发打开测速";
+
+    TestSpeed_USTC *USTC_SPD = new TestSpeed_USTC(this);   // 加载窗口
+
+    USTC_SPD->setAttribute(Qt::WA_DeleteOnClose); // 关闭窗口后删除对象
+    USTC_SPD->setModal(false); // 关闭
+    USTC_SPD->show();
+    USTC_SPD->targetURL(QUrl("https://test6.ustc.edu.cn"));
+    qDebug() << "请检查测速窗口";
+}
+
+/* NJU v4 测速站 - 使用 Qt Web Engine */
+void home::Tools_NJUspd_v4_Trigger(){
     qInfo()<<"已触发打开测速";
 
     TestSpeed_USTC *USTC_SPD = new TestSpeed_USTC(this);   // 加载窗口
@@ -346,6 +361,20 @@ void home::Tools_NJUspd_Trigger(){
     USTC_SPD->setModal(false);
     USTC_SPD->show();
     USTC_SPD->targetURL(QUrl("https://test.nju.edu.cn"));
+
+    qDebug() << "请检查测速窗口";
+}
+
+/* NJU v6 测速站 - 使用 Qt Web Engine */
+void home::Tools_NJUspd_v6_Trigger(){
+    qInfo()<<"已触发打开测速";
+
+    TestSpeed_USTC *USTC_SPD = new TestSpeed_USTC(this);   // 加载窗口
+
+    USTC_SPD->setAttribute(Qt::WA_DeleteOnClose); // 关闭窗口后删除对象
+    USTC_SPD->setModal(false);
+    USTC_SPD->show();
+    USTC_SPD->targetURL(QUrl("https://test6.nju.edu.cn"));
 
     qDebug() << "请检查测速窗口";
 }

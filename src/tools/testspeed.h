@@ -23,5 +23,4 @@ public:
 private:
     Ui::TestSpeed_USTC *ui;
 };
-
 #endif // TESTSPEED_H

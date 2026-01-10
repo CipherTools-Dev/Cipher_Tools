@@ -6,6 +6,8 @@ TestSpeed_USTC::TestSpeed_USTC(QWidget *parent) :
     ui(new Ui::TestSpeed_USTC)
 {
     ui->setupUi(this);
+
+
 }
 
 TestSpeed_USTC::~TestSpeed_USTC()

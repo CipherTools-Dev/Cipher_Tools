@@ -78,8 +78,10 @@ private slots:
     void Tools_MOWeb_Trigger(); // 在线版多出口信号槽
 
 /* 工具 */
-    void Tools_USTCspd_Trigger(); // 在线打开 USTC 测速
-    void Tools_NJUspd_Trigger(); // 在线打开 NJU 测速
+    void Tools_USTCspd_v4_Trigger(); // 在线打开 USTC 测速
+    void Tools_USTCspd_v6_Trigger(); // 在线打开 USTC 测速（V6）
+    void Tools_NJUspd_v4_Trigger(); // 在线打开 NJU 测速
+    void Tools_NJUspd_v6_Trigger(); // 在线打开 NJU 测速
 private:
     Ui::home *ui;
     QNetworkAccessManager *sessionNet;
