@@ -1,7 +1,7 @@
 ---
 name: "✨ 功能请求 / Feature request"
 about: 功能请求 / Feature Request
-title: "[Wishing pool]"
+title: "[功能建议]"
 labels: enhancement, question
 assignees: Ne0W0r1d
 

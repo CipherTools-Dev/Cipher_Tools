@@ -1,7 +1,7 @@
 ---
 name: "\U0001F4A3 BUG 提交 / BUG Report"
 about: 创建一个 Issue 反馈 Bug / Create a issue to feedback bug
-title: "[Feedback - Bug]"
+title: "[BUG反馈]"
 labels: bug
 assignees: Ne0W0r1d
 
